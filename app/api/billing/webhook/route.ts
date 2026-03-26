@@ -1,6 +1,7 @@
 import Stripe from 'stripe'
 import { createClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
+import type { Plan } from '@/types/database'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-04-10',
@@ -32,7 +33,7 @@ export async function POST(request: NextRequest) {
   switch (event.type) {
     // Ödeme başarılı → planı ve kredileri güncelle
     case 'checkout.session.completed': {
-      const session = event.data.object as Stripe.CheckoutSession
+      const session = event.data.object as Stripe.Checkout.Session
       const userId = session.metadata?.supabase_user_id
       const plan = session.metadata?.plan
 
@@ -41,7 +42,7 @@ export async function POST(request: NextRequest) {
         await supabase
           .from('users')
           .update({
-            plan,
+            plan: plan as Plan,
             credits,
             subscription_id: session.subscription as string,
             subscription_status: 'active',
@@ -72,7 +73,7 @@ export async function POST(request: NextRequest) {
         const { data: user } = await supabase
           .from('users')
           .select('plan')
-          .eq('stripe_customer_id', invoice.customer)
+          .eq('stripe_customer_id', invoice.customer as string)
           .single()
 
         if (user) {
@@ -80,7 +81,7 @@ export async function POST(request: NextRequest) {
           await supabase
             .from('users')
             .update({ credits })
-            .eq('stripe_customer_id', invoice.customer)
+            .eq('stripe_customer_id', invoice.customer as string)
         }
       }
       break

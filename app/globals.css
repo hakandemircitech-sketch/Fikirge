@@ -5,22 +5,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
-  --blue: #0057FF;
+  --blue: #0057ff;
   --blue-light: #3d7fff;
   --blue-dim: rgba(0, 87, 255, 0.1);
   --blue-border: rgba(0, 87, 255, 0.25);
-  --orange: #FF6B35;
-  --green: #00D68F;
-  --amber: #F59E0B;
+  --orange: #ff6b35;
+  --green: #00d68f;
+  --green-dim: rgba(0, 214, 143, 0.1);
+  --amber: #f59e0b;
+  --amber-dim: rgba(245, 158, 11, 0.1);
+  --red: #ff4d4d;
+  --red-dim: rgba(255, 77, 77, 0.1);
   --bg: #080a0f;
   --bg2: #0e1118;
   --bg3: #141820;
   --bg4: #1a1f2e;
   --border: rgba(255, 255, 255, 0.06);
   --border2: rgba(255, 255, 255, 0.1);
+  --border3: rgba(255, 255, 255, 0.15);
   --muted: #4a5068;
   --muted2: #7a849e;
   --muted3: #a0aab8;
+  --text: #eef0f8;
+  --sidebar-w: 240px;
+  --syne: 'Syne', sans-serif;
+  --dm: 'DM Sans', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
 }
 
 * {

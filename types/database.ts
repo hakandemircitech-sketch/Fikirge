@@ -6,7 +6,7 @@ export type Json = string | number | boolean | null | { [key: string]: Json } | 
 
 export type Plan = 'starter' | 'builder' | 'studio'
 export type ProjectStatus = 'completed' | 'draft' | 'processing'
-export type CreditLogType = 'generate' | 'refund' | 'bonus'
+export type CreditLogType = 'generate' | 'refund' | 'bonus' | 'purchase'
 
 export interface Database {
   public: {
@@ -24,8 +24,27 @@ export interface Database {
           created_at: string
           updated_at: string
         }
-        Insert: Omit<Database['public']['Tables']['users']['Row'], 'created_at' | 'updated_at'>
-        Update: Partial<Database['public']['Tables']['users']['Insert']>
+        Insert: {
+          id: string
+          email: string
+          name?: string | null
+          plan?: Plan
+          credits?: number
+          stripe_customer_id?: string | null
+          subscription_id?: string | null
+          subscription_status?: string | null
+        }
+        Update: {
+          email?: string
+          name?: string | null
+          plan?: Plan
+          credits?: number
+          stripe_customer_id?: string | null
+          subscription_id?: string | null
+          subscription_status?: string | null
+          updated_at?: string
+        }
+        Relationships: []
       }
       projects: {
         Row: {
@@ -38,8 +57,21 @@ export interface Database {
           created_at: string
           updated_at: string
         }
-        Insert: Omit<Database['public']['Tables']['projects']['Row'], 'id' | 'created_at' | 'updated_at'>
-        Update: Partial<Database['public']['Tables']['projects']['Insert']>
+        Insert: {
+          user_id: string
+          title: string
+          idea: string
+          status?: ProjectStatus
+          output?: Json | null
+        }
+        Update: {
+          title?: string
+          idea?: string
+          status?: ProjectStatus
+          output?: Json | null
+          updated_at?: string
+        }
+        Relationships: []
       }
       credit_logs: {
         Row: {
@@ -50,8 +82,19 @@ export interface Database {
           type: CreditLogType
           created_at: string
         }
-        Insert: Omit<Database['public']['Tables']['credit_logs']['Row'], 'id' | 'created_at'>
-        Update: never
+        Insert: {
+          user_id: string
+          project_id?: string | null
+          amount: number
+          type: CreditLogType
+        }
+        Update: {
+          user_id?: string
+          project_id?: string | null
+          amount?: number
+          type?: CreditLogType
+        }
+        Relationships: []
       }
       exports: {
         Row: {
@@ -62,10 +105,25 @@ export interface Database {
           url: string | null
           created_at: string
         }
-        Insert: Omit<Database['public']['Tables']['exports']['Row'], 'id' | 'created_at'>
-        Update: never
+        Insert: {
+          project_id: string
+          format: string
+          token?: string | null
+          url?: string | null
+        }
+        Update: {
+          project_id?: string
+          format?: string
+          token?: string | null
+          url?: string | null
+        }
+        Relationships: []
       }
     }
+    Views: Record<string, never>
+    Functions: Record<string, never>
+    Enums: Record<string, never>
+    CompositeTypes: Record<string, never>
   }
 }
 

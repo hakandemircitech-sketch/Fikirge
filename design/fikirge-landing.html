@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LaunchForge — Fikrinden Markana</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --blue: #0057FF;
+  --blue-light: #3d7fff;
+  --blue-dim: rgba(0,87,255,0.12);
+  --orange: #FF6B35;
+  --green: #00D68F;
+  --bg: #080a0f;
+  --bg2: #0e1118;
+  --bg3: #141820;
+  --border: rgba(255,255,255,0.06);
+  --border2: rgba(255,255,255,0.1);
+  --text: #eef0f8;
+  --muted: #5a6178;
+  --muted2: #8a93b0;
+  --syne: 'Syne', sans-serif;
+  --dm: 'DM Sans', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--dm);
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* ─── NOISE OVERLAY ─── */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+/* ─── NAV ─── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2.5rem;
+  height: 60px;
+  background: rgba(8,10,15,0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: var(--syne);
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--text);
+}
+.nav-logo span { color: var(--blue); }
+.nav-links { display: flex; align-items: center; gap: 2rem; }
+.nav-links a {
+  font-size: 13px;
+  color: var(--muted2);
+  text-decoration: none;
+  transition: color 0.2s;
+  font-weight: 400;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-cta {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  padding: 9px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.nav-cta:hover { background: var(--blue-light); transform: translateY(-1px); }
+
+/* ─── HERO ─── */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center;
+  padding: 8rem 2rem 6rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Glow orb */
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 20%; left: 50%; transform: translateX(-50%);
+  width: 600px; height: 400px;
+  background: radial-gradient(ellipse at center, rgba(0,87,255,0.18) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--blue-light);
+  border: 1px solid rgba(0,87,255,0.3);
+  background: rgba(0,87,255,0.08);
+  padding: 6px 16px;
+  border-radius: 100px;
+  margin-bottom: 2.5rem;
+  animation: fadeUp 0.8s ease both;
+}
+.hero-badge-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--blue);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.8)} }
+
+h1 {
+  font-family: var(--syne);
+  font-size: clamp(3rem, 7vw, 6.5rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  margin-bottom: 1.75rem;
+  animation: fadeUp 0.8s 0.1s ease both;
+}
+h1 .line2 { color: var(--blue); display: block; }
+h1 .line3 { color: var(--muted2); display: block; font-weight: 600; }
+
+.hero-sub {
+  font-size: 1.1rem;
+  color: var(--muted2);
+  max-width: 520px;
+  line-height: 1.8;
+  font-weight: 300;
+  margin-bottom: 3rem;
+  animation: fadeUp 0.8s 0.2s ease both;
+}
+
+.hero-actions {
+  display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+  animation: fadeUp 0.8s 0.3s ease both;
+}
+.btn-primary {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 10px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+  display: inline-flex; align-items: center; gap: 10px;
+}
+.btn-primary:hover { background: var(--blue-light); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,87,255,0.35); }
+.btn-ghost {
+  font-size: 13px;
+  color: var(--muted2);
+  border: 1px solid var(--border2);
+  padding: 14px 28px;
+  border-radius: 10px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+  display: inline-flex; align-items: center; gap: 10px;
+  background: transparent;
+}
+.btn-ghost:hover { border-color: var(--blue); color: var(--blue); }
+
+.hero-note {
+  margin-top: 1.25rem;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  animation: fadeUp 0.8s 0.4s ease both;
+}
+
+/* Hero demo window */
+.hero-window {
+  margin-top: 5rem;
+  width: 100%; max-width: 760px;
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: 16px;
+  overflow: hidden;
+  animation: fadeUp 0.8s 0.5s ease both;
+  box-shadow: 0 40px 120px rgba(0,0,0,0.6), 0 0 0 1px var(--border);
+}
+.window-bar {
+  background: var(--bg3);
+  padding: 14px 20px;
+  display: flex; align-items: center; gap: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.wdot { width: 10px; height: 10px; border-radius: 50%; }
+.wdot.r{background:#ff5f57} .wdot.y{background:#ffbd2e} .wdot.g{background:#28ca41}
+.window-title { margin: 0 auto; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.window-body { padding: 2rem; text-align: left; }
+.demo-label { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-bottom: 0.75rem; letter-spacing: 0.08em; }
+.demo-input-wrap {
+  display: flex; gap: 10px;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 1.5rem;
+  align-items: center;
+}
+.demo-input-wrap input {
+  flex: 1;
+  background: none; border: none; outline: none;
+  font-family: var(--dm);
+  font-size: 14px;
+  color: var(--text);
+  font-weight: 300;
+}
+.demo-input-wrap input::placeholder { color: var(--muted); }
+.demo-btn {
+  font-family: var(--mono);
+  font-size: 11px;
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 7px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+.demo-btn:hover { background: var(--blue-light); }
+
+.demo-output { display: none; }
+.demo-output.visible { display: block; }
+
+.demo-modules {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 8px;
+}
+.demo-module {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all 0.4s;
+}
+.demo-module.show { opacity: 1; transform: translateY(0); border-color: rgba(0,87,255,0.3); }
+.dm-label { font-family: var(--mono); font-size: 10px; color: var(--blue-light); margin-bottom: 4px; }
+.dm-val { font-size: 12px; color: var(--muted2); line-height: 1.5; }
+.dm-val strong { color: var(--text); font-weight: 500; }
+
+/* ─── SCROLLING LOGOS ─── */
+.logos-section {
+  padding: 3rem 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+  position: relative;
+}
+.logos-label {
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  margin-bottom: 1.5rem;
+}
+.logos-track {
+  display: flex; gap: 3rem; width: max-content;
+  animation: scroll 25s linear infinite;
+}
+.logos-track-wrap { display: flex; gap: 3rem; }
+@keyframes scroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+.logo-pill {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  padding: 8px 20px;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  white-space: nowrap;
+  transition: color 0.2s, border-color 0.2s;
+}
+.logo-pill:hover { color: var(--text); border-color: var(--border2); }
+
+/* ─── HOW IT WORKS ─── */
+.section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 6rem 2.5rem;
+}
+.section-tag {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--blue);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+h2 {
+  font-family: var(--syne);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
+.section-sub {
+  font-size: 1rem;
+  color: var(--muted2);
+  max-width: 500px;
+  line-height: 1.8;
+  font-weight: 300;
+  margin-bottom: 3.5rem;
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.step-card {
+  background: var(--bg);
+  padding: 2rem;
+  transition: background 0.2s;
+  position: relative;
+}
+.step-card:hover { background: var(--bg2); }
+.step-card::after {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--blue);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.step-card:hover::after { opacity: 1; }
+.step-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--blue);
+  border: 1px solid rgba(0,87,255,0.3);
+  background: var(--blue-dim);
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 1.25rem;
+}
+.step-card h3 {
+  font-family: var(--syne);
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+.step-card p { font-size: 0.875rem; color: var(--muted2); line-height: 1.7; font-weight: 300; }
+
+/* ─── OUTPUTS ─── */
+.outputs-section {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.outputs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+.output-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: border-color 0.2s, transform 0.2s;
+  cursor: default;
+}
+.output-card:hover { border-color: rgba(0,87,255,0.4); transform: translateY(-3px); }
+.output-icon {
+  font-family: var(--mono);
+  font-size: 20px;
+  margin-bottom: 0.75rem;
+}
+.output-card h4 {
+  font-family: var(--syne);
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+.output-card p { font-size: 0.8rem; color: var(--muted2); line-height: 1.6; font-weight: 300; }
+.output-tag {
+  display: inline-block;
+  margin-top: 0.75rem;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--blue-light);
+  background: var(--blue-dim);
+  padding: 3px 10px;
+  border-radius: 100px;
+}
+
+/* ─── COMPARISON ─── */
+.compare-wrap {
+  overflow-x: auto;
+}
+table.compare {
+  width: 100%; border-collapse: collapse;
+  font-size: 13px;
+}
+.compare th {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 11px;
+  font-family: var(--mono);
+  color: var(--muted);
+  font-weight: 400;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.compare td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted2);
+  vertical-align: middle;
+}
+.compare tr:last-child td { border-bottom: none; }
+.compare td:first-child { color: var(--text); font-weight: 500; }
+.compare tr.hero-row td { background: rgba(0,87,255,0.06); }
+.compare tr.hero-row td:first-child { color: var(--blue); }
+.tick { color: var(--green); font-size: 15px; }
+.cross { color: var(--muted); font-size: 15px; }
+.partial { color: var(--orange); font-size: 13px; }
+
+/* ─── PRICING ─── */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+.plan-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  transition: border-color 0.2s;
+  position: relative;
+}
+.plan-card.featured {
+  border-color: var(--blue);
+  background: linear-gradient(135deg, rgba(0,87,255,0.08), var(--bg2));
+}
+.plan-badge-top {
+  position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  background: var(--blue);
+  color: #fff;
+  padding: 4px 16px;
+  border-radius: 100px;
+  white-space: nowrap;
+}
+.plan-name {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+.plan-price {
+  font-family: var(--syne);
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  margin-bottom: 0.25rem;
+  line-height: 1;
+}
+.plan-price sup { font-size: 1.2rem; vertical-align: super; font-weight: 600; }
+.plan-price sub { font-size: 0.9rem; font-weight: 400; color: var(--muted2); font-family: var(--dm); }
+.plan-note { font-size: 12px; color: var(--muted); margin-bottom: 1.5rem; font-family: var(--mono); }
+.plan-features { list-style: none; margin-bottom: 2rem; }
+.plan-features li {
+  font-size: 13px;
+  color: var(--muted2);
+  padding: 8px 0;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+  font-weight: 300;
+}
+.plan-features li .pf-icon { color: var(--green); font-size: 13px; flex-shrink: 0; }
+.plan-btn {
+  display: block; width: 100%;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+  border: none;
+}
+.plan-btn.outline { background: transparent; border: 1px solid var(--border2); color: var(--muted2); }
+.plan-btn.outline:hover { border-color: var(--blue); color: var(--blue); }
+.plan-btn.solid { background: var(--blue); color: #fff; }
+.plan-btn.solid:hover { background: var(--blue-light); transform: translateY(-1px); }
+
+/* ─── FAQ ─── */
+.faq-list { max-width: 680px; }
+.faq-item { border-bottom: 1px solid var(--border); }
+.faq-q {
+  width: 100%; text-align: left; background: none; border: none;
+  padding: 1.25rem 0;
+  font-family: var(--syne);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center;
+  letter-spacing: -0.01em;
+}
+.faq-q .faq-icon { color: var(--blue); font-size: 1.2rem; transition: transform 0.3s; flex-shrink: 0; }
+.faq-q.open .faq-icon { transform: rotate(45deg); }
+.faq-a {
+  font-size: 0.875rem;
+  color: var(--muted2);
+  line-height: 1.8;
+  font-weight: 300;
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.35s ease, padding 0.2s;
+}
+.faq-a.open { max-height: 300px; padding-bottom: 1.25rem; }
+
+/* ─── CTA BOTTOM ─── */
+.cta-section {
+  text-align: center;
+  padding: 7rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.cta-section::before {
+  content: '';
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  width: 700px; height: 400px;
+  background: radial-gradient(ellipse, rgba(0,87,255,0.15), transparent 70%);
+  pointer-events: none;
+}
+.cta-section h2 { font-size: clamp(2rem, 5vw, 4rem); margin-bottom: 1rem; }
+.cta-section p { color: var(--muted2); font-weight: 300; margin-bottom: 2.5rem; font-size: 1rem; }
+
+/* ─── FOOTER ─── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 2.5rem;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 1rem;
+}
+.footer-logo { font-family: var(--syne); font-weight: 800; font-size: 16px; letter-spacing: -0.03em; }
+.footer-logo span { color: var(--blue); }
+.footer-links { display: flex; gap: 1.5rem; }
+.footer-links a { font-size: 12px; color: var(--muted); text-decoration: none; }
+.footer-links a:hover { color: var(--text); }
+.footer-copy { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.reveal {
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 640px) {
+  nav { padding: 0 1.25rem; }
+  .nav-links { display: none; }
+  .demo-modules { grid-template-columns: 1fr 1fr; }
+  footer { flex-direction: column; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Launch<span>Forge</span></div>
+  <div class="nav-links">
+    <a href="#nasil">Nasıl Çalışır</a>
+    <a href="#ciktilar">Çıktılar</a>
+    <a href="#fiyat">Fiyatlar</a>
+    <a href="#sss">SSS</a>
+  </div>
+  <a href="#fiyat" class="nav-cta">Ücretsiz Dene →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">
+    <div class="hero-badge-dot"></div>
+    AI destekli proje oluşturma motoru
+  </div>
+
+  <h1>
+    Fikrini yaz.
+    <span class="line2">Her şeyini</span>
+    <span class="line3">biz oluştururuz.</span>
+  </h1>
+
+  <p class="hero-sub">
+    Pazar analizi, rakip haritası, marka kimliği, teknik altyapı, yol haritası —
+    hepsi tek bir akışta, saniyeler içinde.
+  </p>
+
+  <div class="hero-actions">
+    <a href="#demo" class="btn-primary">
+      Hemen Dene
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <a href="#nasil" class="btn-ghost">Nasıl çalışır?</a>
+  </div>
+
+  <p class="hero-note">Kayıt gerekmez · Ücretsiz başla · Kredi kartı yok</p>
+
+  <!-- DEMO WINDOW -->
+  <div class="hero-window" id="demo">
+    <div class="window-bar">
+      <div class="wdot r"></div>
+      <div class="wdot y"></div>
+      <div class="wdot g"></div>
+      <div class="window-title">launchforge.io — proje oluşturucu</div>
+    </div>
+    <div class="window-body">
+      <div class="demo-label">// FİKRİNİ YAZIN</div>
+      <div class="demo-input-wrap">
+        <input type="text" id="demoInput" placeholder="örn. yapay zeka destekli muhasebe programı kurmak istiyorum..." />
+        <button class="demo-btn" onclick="runDemo()">Analiz Et →</button>
+      </div>
+      <div class="demo-output" id="demoOutput">
+        <div class="demo-label">// ÇIKTILAR OLUŞTURULUYOR</div>
+        <div class="demo-modules" id="demoModules">
+          <div class="demo-module" id="m1">
+            <div class="dm-label">PAZAR ANALİZİ</div>
+            <div class="dm-val">TAM: <strong>$8.2B</strong> · Büyüme: <strong>%24/yıl</strong></div>
+          </div>
+          <div class="demo-module" id="m2">
+            <div class="dm-label">MARKA İSMİ</div>
+            <div class="dm-val"><strong>LedgerAI</strong> · ledgerai.com ✓</div>
+          </div>
+          <div class="demo-module" id="m3">
+            <div class="dm-label">RAKIP DURUMU</div>
+            <div class="dm-val"><strong>4 rakip</strong> tespit edildi · Boşluk var</div>
+          </div>
+          <div class="demo-module" id="m4">
+            <div class="dm-label">TEKNİK STACK</div>
+            <div class="dm-val">Next.js · Supabase · <strong>Stripe</strong></div>
+          </div>
+          <div class="demo-module" id="m5">
+            <div class="dm-label">FİYATLANDIRMA</div>
+            <div class="dm-val">Freemium · $29 Pro · <strong>$99 Business</strong></div>
+          </div>
+          <div class="demo-module" id="m6">
+            <div class="dm-label">YOL HARİTASI</div>
+            <div class="dm-val">MVP: <strong>6 hafta</strong> · İlk kullanıcı: 8. hafta</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCROLLING BADGES -->
+<div class="logos-section">
+  <div class="logos-label">PAZAR ANALİZİ · MARKA KİMLİĞİ · TEKNİK STACK · YOL HARİTASI · RAKIP HARİTASI · FİYATLANDIRMA · DOMAIN KONTROLÜ · PİTCH DECK</div>
+  <div class="logos-track">
+    <div class="logos-track-wrap">
+      <span class="logo-pill">Next.js</span>
+      <span class="logo-pill">Supabase</span>
+      <span class="logo-pill">Vercel</span>
+      <span class="logo-pill">Stripe</span>
+      <span class="logo-pill">Claude API</span>
+      <span class="logo-pill">Tailwind CSS</span>
+      <span class="logo-pill">TypeScript</span>
+      <span class="logo-pill">PostgreSQL</span>
+      <span class="logo-pill">Resend</span>
+      <span class="logo-pill">Posthog</span>
+      <span class="logo-pill">React</span>
+      <span class="logo-pill">Framer Motion</span>
+    </div>
+    <div class="logos-track-wrap" aria-hidden="true">
+      <span class="logo-pill">Next.js</span>
+      <span class="logo-pill">Supabase</span>
+      <span class="logo-pill">Vercel</span>
+      <span class="logo-pill">Stripe</span>
+      <span class="logo-pill">Claude API</span>
+      <span class="logo-pill">Tailwind CSS</span>
+      <span class="logo-pill">TypeScript</span>
+      <span class="logo-pill">PostgreSQL</span>
+      <span class="logo-pill">Resend</span>
+      <span class="logo-pill">Posthog</span>
+      <span class="logo-pill">React</span>
+      <span class="logo-pill">Framer Motion</span>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div id="nasil">
+  <div class="section">
+    <div class="section-tag reveal">// nasıl çalışır</div>
+    <h2 class="reveal">Fikrinden lansmana<br>tek bir akışta.</h2>
+    <p class="section-sub reveal">4 adımda tüm proje altyapın hazır. Saatler değil, dakikalar.</p>
+
+    <div class="steps-grid reveal">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <h3>Fikrini Anlat</h3>
+        <p>Tek cümle bile yeter. Ne istediğini bilmiyorsan sistem sana sorular sorar, fikri birlikte netleştiriz.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <h3>Piyasayı Analiz Et</h3>
+        <p>Gerçek zamanlı veri ile pazar büyüklüğü, doğrudan rakipler, fiyatlandırma stratejileri ve boşluklar ortaya çıkar.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <h3>Markanı Oluştur</h3>
+        <p>Proje ismi, renk paleti, tipografi, ses tonu — marka kimliğinin tamamı, ayrı bir araç gerektirmeden.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">04</div>
+        <h3>Paketi İndir</h3>
+        <p>Teknik altyapı, yol haritası ve tüm kararlar PDF veya Notion olarak hazır. Hemen geliştirmeye başla.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OUTPUTS -->
+<div class="outputs-section" id="ciktilar">
+  <div class="section">
+    <div class="section-tag reveal">// ne alırsın</div>
+    <h2 class="reveal">6 modül.<br>Tam bir proje paketi.</h2>
+    <p class="section-sub reveal">Her modül bağımsız çalışır ama hepsi birbirine bağlı tutarlı bir bütün oluşturur.</p>
+
+    <div class="outputs-grid reveal">
+      <div class="output-card">
+        <div class="output-icon">📊</div>
+        <h4>Pazar Analizi</h4>
+        <p>TAM/SAM/SOM hesapları, büyüme trendleri, hedef kitle profili ve gelir potansiyeli.</p>
+        <span class="output-tag">Gerçek Veri</span>
+      </div>
+      <div class="output-card">
+        <div class="output-icon">🔍</div>
+        <h4>Rakip Haritası</h4>
+        <p>Mevcut rakipler, güçlü/zayıf yönleri, fiyatlandırmaları ve senin için boşluk analizi.</p>
+        <span class="output-tag">Canlı Analiz</span>
+      </div>
+      <div class="output-card">
+        <div class="output-icon">🎨</div>
+        <h4>Marka Kimliği</h4>
+        <p>Proje ismi, domain kontrolü, renk paleti, tipografi ve ses tonu rehberi.</p>
+        <span class="output-tag">Özgün</span>
+      </div>
+      <div class="output-card">
+        <div class="output-icon">⚙️</div>
+        <h4>Teknik Stack</h4>
+        <p>Frontend, backend, veritabanı, ödeme sistemi — projeye özel teknoloji seçimi ve gerekçesi.</p>
+        <span class="output-tag">Production-Ready</span>
+      </div>
+      <div class="output-card">
+        <div class="output-icon">🗺️</div>
+        <h4>Yol Haritası</h4>
+        <p>MVP'den ilk müşteriye kadar haftalık milestonelar. Gerçekçi, uygulanabilir plan.</p>
+        <span class="output-tag">Aksiyon Odaklı</span>
+      </div>
+      <div class="output-card">
+        <div class="output-icon">💰</div>
+        <h4>Gelir Modeli</h4>
+        <p>Fiyatlandırma stratejisi, abonelik yapısı, freemium/premium dengesi ve ARR hedefi.</p>
+        <span class="output-tag">SaaS Optimize</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPARISON -->
+<div class="section">
+  <div class="section-tag reveal">// rakip analizi</div>
+  <h2 class="reveal">Neden LaunchForge?</h2>
+  <p class="section-sub reveal">Diğer araçlar parçalı çözer. Biz uçtan uca.</p>
+
+  <div class="compare-wrap reveal">
+    <table class="compare">
+      <thead>
+        <tr>
+          <th>Platform</th>
+          <th>Pazar Analizi</th>
+          <th>Marka Kimliği</th>
+          <th>Teknik Stack</th>
+          <th>Fikir Geliştirme</th>
+          <th>Tek Akış</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>IdeaProof</td>
+          <td><span class="tick">✓</span></td>
+          <td><span class="partial">Kısmi</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+        </tr>
+        <tr>
+          <td>Preuve AI</td>
+          <td><span class="tick">✓</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+        </tr>
+        <tr>
+          <td>ValidatorAI</td>
+          <td><span class="partial">Kısmi</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+        </tr>
+        <tr>
+          <td>SystemMD</td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="tick">✓</span></td>
+          <td><span class="cross">✗</span></td>
+          <td><span class="cross">✗</span></td>
+        </tr>
+        <tr class="hero-row">
+          <td>LaunchForge</td>
+          <td><span class="tick">✓</span></td>
+          <td><span class="tick">✓</span></td>
+          <td><span class="tick">✓</span></td>
+          <td><span class="tick">✓</span></td>
+          <td><span class="tick">✓</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- PRICING -->
+<div id="fiyat" style="background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="section">
+    <div class="section-tag reveal">// fiyatlandırma</div>
+    <h2 class="reveal">Basit. Dürüst. Şeffaf.</h2>
+    <p class="section-sub reveal">Ücretsiz başla, büyüdükçe yükselt. Gizli ücret yok.</p>
+
+    <div class="pricing-grid reveal">
+      <div class="plan-card">
+        <div class="plan-name">Starter</div>
+        <div class="plan-price"><sup>$</sup>0<sub> / ay</sub></div>
+        <div class="plan-note">Denemek isteyenler için</div>
+        <ul class="plan-features">
+          <li><span class="pf-icon">→</span> Ayda 2 proje paketi</li>
+          <li><span class="pf-icon">→</span> Temel pazar analizi</li>
+          <li><span class="pf-icon">→</span> Marka ismi önerisi</li>
+          <li><span class="pf-icon">→</span> PDF export (filigran)</li>
+        </ul>
+        <a href="#" class="plan-btn outline">Ücretsiz Başla</a>
+      </div>
+
+      <div class="plan-card featured">
+        <div class="plan-badge-top">En Çok Tercih Edilen</div>
+        <div class="plan-name">Builder</div>
+        <div class="plan-price"><sup>$</sup>29<sub> / ay</sub></div>
+        <div class="plan-note">Aktif kurucular için</div>
+        <ul class="plan-features">
+          <li><span class="pf-icon">→</span> Ayda 15 proje paketi</li>
+          <li><span class="pf-icon">→</span> Tam pazar + rakip analizi</li>
+          <li><span class="pf-icon">→</span> Tam marka kimliği</li>
+          <li><span class="pf-icon">→</span> Teknik stack + yol haritası</li>
+          <li><span class="pf-icon">→</span> PDF + Notion export</li>
+          <li><span class="pf-icon">→</span> Email desteği</li>
+        </ul>
+        <a href="#" class="plan-btn solid">Builder'a Geç</a>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-name">Studio</div>
+        <div class="plan-price"><sup>$</sup>79<sub> / ay</sub></div>
+        <div class="plan-note">Ajanslar ve ekipler için</div>
+        <ul class="plan-features">
+          <li><span class="pf-icon">→</span> Sınırsız proje</li>
+          <li><span class="pf-icon">→</span> White-label çıktı</li>
+          <li><span class="pf-icon">→</span> API erişimi</li>
+          <li><span class="pf-icon">→</span> Ekip paylaşımı</li>
+          <li><span class="pf-icon">→</span> Öncelikli destek</li>
+        </ul>
+        <a href="#" class="plan-btn outline">Studio'ya Geç</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div id="sss">
+  <div class="section">
+    <div class="section-tag reveal">// sık sorulan sorular</div>
+    <h2 class="reveal">Aklındaki sorular.</h2>
+    <br>
+    <div class="faq-list reveal">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Teknik bilgim olmasa da kullanabilir miyim?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          Kesinlikle. LaunchForge teknik olmayan kurucular için de tasarlandı. Teknik stack modülü hangi teknolojilerin kullanılacağını açıklar ama bunları kendin uygulamak zorunda değilsin — çıktıyı bir developer'a veya Cursor gibi araçlara verebilirsin.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Pazar analizi gerçek veriye mi dayanıyor?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          Evet. Canlı web araması, Google Trends sinyalleri ve sektörel veri tabanlarından beslenen gerçek zamanlı analizdir. Uydurma rakam üretmez, kaynak gösterir.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Bir proje oluşturmak ne kadar sürer?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          Tam paket ortalama 60-90 saniyede tamamlanır. Fikir netleştirme modunu kullanıyorsan bu süre biraz uzayabilir ama yine de 5 dakikayı geçmez.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Fikirlerim güvende mi?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          Fikirlerini model eğitiminde kullanmıyoruz. İşlenen veriler şifrelenir ve üçüncü taraflarla paylaşılmaz. Her proje paketi yalnızca sana aittir.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Çıktıları nasıl kullanabilirim?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          PDF olarak indir, Notion'a aktar veya paylaşılabilir link oluştur. Teknik dosyaları (stack rehberi, yol haritası) doğrudan Cursor veya GitHub'a taşıyabilirsin.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA BOTTOM -->
+<div class="cta-section">
+  <h2 class="reveal">Fikrin hazır.<br><span style="color: var(--blue);">Başlamak için ne bekliyorsun?</span></h2>
+  <p class="reveal">Ücretsiz hesap aç, ilk projenizi bugün oluştur.</p>
+  <a href="#" class="btn-primary reveal" style="display: inline-flex; margin: 0 auto;">
+    Ücretsiz Başla
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Launch<span>Forge</span></div>
+  <div class="footer-links">
+    <a href="#">Gizlilik</a>
+    <a href="#">Kullanım Koşulları</a>
+    <a href="#">İletişim</a>
+  </div>
+  <div class="footer-copy">© 2025 LaunchForge · Tüm hakları saklıdır.</div>
+</footer>
+
+<script>
+// Demo interaction
+function runDemo() {
+  const input = document.getElementById('demoInput').value.trim();
+  if (!input) {
+    document.getElementById('demoInput').placeholder = 'Lütfen bir fikir yazın...';
+    return;
+  }
+  const output = document.getElementById('demoOutput');
+  output.classList.add('visible');
+  const modules = document.querySelectorAll('.demo-module');
+  modules.forEach(m => m.classList.remove('show'));
+  modules.forEach((m, i) => {
+    setTimeout(() => m.classList.add('show'), i * 180);
+  });
+}
+document.getElementById('demoInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') runDemo();
+});
+
+// FAQ
+function toggleFaq(btn) {
+  const answer = btn.nextElementSibling;
+  const isOpen = btn.classList.contains('open');
+  document.querySelectorAll('.faq-q').forEach(q => {
+    q.classList.remove('open');
+    q.nextElementSibling.classList.remove('open');
+  });
+  if (!isOpen) {
+    btn.classList.add('open');
+    answer.classList.add('open');
+  }
+}
+
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), 80);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
+import type { ProjectStatus } from '@/types/database'
 
 // GET — kullanıcının projelerini listele
 export async function GET(request: NextRequest) {
@@ -18,7 +19,7 @@ export async function GET(request: NextRequest) {
     .order('created_at', { ascending: false })
     .limit(limit)
 
-  if (status) query = query.eq('status', status)
+  if (status) query = query.eq('status', status as ProjectStatus)
 
   const { data, error } = await query
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })

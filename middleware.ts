@@ -7,7 +7,7 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Auth ve API route'ları hariç her şeyi kontrol et
-    '/((?!_next/static|_next/image|favicon.ico|api/billing/webhook|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    // _next/* tamamen hariç (static, image, HMR, chunk'lar) — aksi halde bazı ortamlarda 404
+    '/((?!_next/|favicon.ico|api/billing/webhook|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 }
