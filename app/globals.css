@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --blue: #0057FF;
+  --blue-light: #3d7fff;
+  --blue-dim: rgba(0, 87, 255, 0.1);
+  --blue-border: rgba(0, 87, 255, 0.25);
+  --orange: #FF6B35;
+  --green: #00D68F;
+  --amber: #F59E0B;
+  --bg: #080a0f;
+  --bg2: #0e1118;
+  --bg3: #141820;
+  --bg4: #1a1f2e;
+  --border: rgba(255, 255, 255, 0.06);
+  --border2: rgba(255, 255, 255, 0.1);
+  --muted: #4a5068;
+  --muted2: #7a849e;
+  --muted3: #a0aab8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: #eef0f8;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--muted); border-radius: 100px; }
+
+/* Focus ring */
+:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
