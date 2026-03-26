@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { createClient } from '@/lib/supabase/client'
 
 const ArrowIcon = () => (
   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
@@ -20,7 +21,15 @@ export default function LandingView() {
   const [demoVisible, setDemoVisible] = useState(false)
   const [demoShown, setDemoShown] = useState<number[]>([])
   const [openFaq, setOpenFaq] = useState<number | null>(null)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const demoTimers = useRef<number[]>([])
+
+  useEffect(() => {
+    const supabase = createClient()
+    supabase.auth.getUser().then(({ data }) => {
+      setIsLoggedIn(!!data.user)
+    })
+  }, [])
 
   const runDemo = useCallback(() => {
     const v = demoInput.trim()
@@ -76,9 +85,15 @@ export default function LandingView() {
           <a href="#fiyat">Fiyatlar</a>
           <a href="#sss">SSS</a>
         </div>
-        <Link href="/auth/login" className="nav-cta">
-          Ücretsiz Dene →
-        </Link>
+        {isLoggedIn ? (
+          <Link href="/dashboard" className="nav-cta">
+            Dashboard →
+          </Link>
+        ) : (
+          <Link href="/auth/login" className="nav-cta">
+            Ücretsiz Dene →
+          </Link>
+        )}
       </nav>
 
       <section className="hero">

@@ -91,6 +91,9 @@ export function DashboardChrome({
           <span className="nav-item" style={{ opacity: 0.5, cursor: 'not-allowed' }}>
             <span className="nav-icon">💬</span> Destek
           </span>
+          <Link className="nav-item" href="/">
+            <span className="nav-icon">🏠</span> Ana Sayfa
+          </Link>
         </nav>
 
         <Link href="/account" className="sidebar-user" style={{ textDecoration: 'none', color: 'inherit' }}>
